@@ -10,9 +10,13 @@ function App() {
         <Col>
           <h1 className="display-4">Contactbook</h1>
         </Col>
+        
         <Col className="d-flex justify-content-end">
           <Link className="btn btn-secondary" to="/new">{'\u002B'}</Link>
         </Col>
+        <Row>
+        <input type="text" value='' placeholder='Search' />
+        </Row>
       </Row>
       <Outlet />
     </Container>

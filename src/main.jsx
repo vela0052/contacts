@@ -7,8 +7,9 @@ import './index.css'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Notes from './routes/Notes'
-import Note from './routes/Note'
+import Edit from './routes/Edit'
 import New from './routes/New'
+import Note from './routes/Note'
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,12 @@ const router = createBrowserRouter([
         element: <Notes />
       },
       {
-        path: '/note/:id',
+        path: '/contact/:id',
         element: <Note />
+      },
+      {
+        path: '/edit/:id',
+        element: <Edit />
       },
       {
         path: '/new',
