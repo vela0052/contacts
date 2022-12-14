@@ -14,7 +14,7 @@ function Notes () {
 
   useEffect(() => {
     const c = collection(db, 'contacts' )
-    const q = query(c, orderBy('firstName'))
+    const q = query(c, orderBy('lastName'))
     //get snapshot
     const unsubscribe = onSnapshot(q, (snapshot) =>{
       const data = [] 
