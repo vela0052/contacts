@@ -28,7 +28,7 @@ function Notes () {
   }, [])
 
   return (
-    <Row>
+    <Row><input className="m-5 p-2" type="text" value='' placeholder='Search' />
       {contacts.map(contact =>(
       <Col key={contact.id} className="col-12 col-md-6 col-lg-4 mb-3">
         <Link className="text-decoration-none text-body" to={"/contact/" + contact.id}>

@@ -15,7 +15,7 @@ function App() {
           <Link className="btn btn-secondary" to="/new">{'\u002B'}</Link>
         </Col>
         <Row>
-        <input type="text" value='' placeholder='Search' />
+        
         </Row>
       </Row>
       <Outlet />

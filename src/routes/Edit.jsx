@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Col from "../components/Col";
 import Row from "../components/Row";
 
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
 import db from '../db'
 
 function Edit () {
   const params = useParams()
+  const navigate = useNavigate()
   const [contact, setContact] = useState({
     firstName: '',
     lastName: '',
@@ -15,14 +16,23 @@ function Edit () {
   })
 
   function changeHandler (e) {
+    setContact({
+      ...contact,
+      [e.target.name]:e.target.value
+    })
 
   }
 
   function submitHandler (e) {
     e.preventDefault()
+    //returns a promise ( then method)
+    updateDoc(doc(db, 'contacts', params.id), contact)
+    .then(()=> navigate('/contact/'+params.id))
   }
 
   function clickHandler () {
+    deleteDoc(doc(db, 'contacts', params.id))
+    .then(() => navigate('/'))
     
   }
   useEffect(()=>{
@@ -44,7 +54,7 @@ function Edit () {
       <Col>
         <form className="p-5 bg-light border border-1 mb-3"
           onSubmit={submitHandler}>
-          <h2 className="mb-3">Edit Contact: {params.id}</h2>
+          <h2 className="mb-3">Edit Contact: {contact.firstName} {contact.lastName}</h2>
           <div className="mb-3">
             <label className="form-label">First Name</label>
             <input name="firstName" type="text" className="form-control"
@@ -57,8 +67,8 @@ function Edit () {
           </div>
           <div className="mb-3">
             <label className="form-label">Email</label>
-            <textarea name="email" className="form-control"
-              value={contact.email} onChange={changeHandler}></textarea>
+            <input name="email" type="text" className="form-control"
+              value={contact.email} onChange={changeHandler}></input>
           </div>
           <div className="d-flex justify-content-end">
             <Link className="btn btn-secondary me-3" to={"/contact/"+params.id}>Cancel</Link>

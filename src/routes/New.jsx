@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Col from "../components/Col";
 import Row from "../components/Row";
 
+import { collection, addDoc } from 'firebase/firestore'
+import db from '../db'
+
 function New () {
+  const navigate = useNavigate()
   const [contact, setContact] = useState({
     firstName: '',
     lastName: '',
@@ -11,11 +15,23 @@ function New () {
   })
 
   function changeHandler (e) {
+    // console.log(e.target.name, e.target.value)
+    setContact({
+      ...contact,
+      [e.target.name]:e.target.value 
+    })
+
 
   }
 
   function submitHandler (e) {
     e.preventDefault()
+    const c = collection(db, 'contacts')
+    // addDoc returns a promise, use an asynchronous method( ex. then method)
+    addDoc(c, contact)
+      .then(document => navigate('/contact/' + document.id))
+
+
   }
 
   return (
@@ -36,8 +52,8 @@ function New () {
           </div>
           <div className="mb-3">
             <label className="form-label">email</label>
-            <textarea name="email" className="form-control"
-              value={contact.email} onChange={changeHandler}></textarea>
+            <input name="email" type="text" className="form-control"
+              value={contact.email} onChange={changeHandler}></input>
           </div>
           <div className="d-flex justify-content-end">
             <Link className="btn btn-secondary me-3" to="/">Cancel</Link>
