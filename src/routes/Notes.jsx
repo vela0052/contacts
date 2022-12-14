@@ -4,11 +4,13 @@ import Card from "../components/Card";
 import Col from "../components/Col";
 import Row from "../components/Row";
 
-import { collection, query, onSnapshot, orderBy } from 'firebase/firestore'
+import { collection, query, onSnapshot, orderBy, serverTimestamp } from 'firebase/firestore'
 import db from '../db'
 
 function Notes () {
   const [contacts, setContacts] = useState([])
+  const [quer, setQuer] = useState([])
+ 
 
   useEffect(() => {
     const c = collection(db, 'contacts' )
@@ -23,21 +25,41 @@ function Notes () {
         email: doc.data().email
       }))
       setContacts(data)
-    })
+      const search = data.filter(contact => (
+        contact.firstName.toLowerCase().includes(quer.toLowerCase()) ||
+        contact.lastName.toLowerCase().includes(quer.toLowerCase())))
+    setContacts(search)
+      })
+    },[quer])
+  
+    function formHandler (e) {
+      e.preventDefault();
+    }
+    function textHandler (e) {
+      setQuer(e.target.value)
+      
+    }
+  
 
-  }, [])
 
   return (
-    <Row><input className="m-5 p-2" type="text" value='' placeholder='Search' />
+    <>
+    <form onSubmit={formHandler}>
+      <input className="m-5 p-2" type="text" value={quer} onChange={textHandler} placeholder='Search' />
+    </form>
+    
+    <Row>
       {contacts.map(contact =>(
       <Col key={contact.id} className="col-12 col-md-6 col-lg-4 mb-3">
         <Link className="text-decoration-none text-body" to={"/contact/" + contact.id}>
           <Card firstName={contact.firstName} lastName={contact.lastName} email={contact.email} />
         </Link>
       </Col>
+      
     
   ))}
   </Row>
+  </>
 )
       }
 export default Notes
